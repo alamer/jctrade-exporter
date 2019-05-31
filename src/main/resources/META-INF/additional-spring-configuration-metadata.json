@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "autoshop.ImageDir",
+      "type": "java.lang.String",
+      "description": "Image files export directory"
+    },
+    {
+      "name": "autoshop.reportDir",
+      "type": "java.lang.String",
+      "description": "Report files export directory"
+    }
+  ] }
