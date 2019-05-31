@@ -2,6 +2,7 @@ package com.alamer.jctradeexporter.dao;
 
 import com.alamer.jctradeexporter.dto.AutoShopImageDTO;
 import com.alamer.jctradeexporter.mapper.AutoShopImageMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,9 @@ public class AutoshopImageDAO {
     final
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    AutoShopImageMapper imageMapper;
+
     public AutoshopImageDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -27,6 +31,6 @@ public class AutoshopImageDAO {
 
     public List<AutoShopImageDTO> findAllNew() throws IOException {
         String sql= new String(Files.readAllBytes(resourceFile.getFile().toPath()));
-        return jdbcTemplate.query(sql,new AutoShopImageMapper());
+        return jdbcTemplate.query(sql,imageMapper);
     }
 }

@@ -1,6 +1,5 @@
 package com.alamer.jctradeexporter.dto;
 
-import com.sun.istack.internal.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +7,6 @@ import lombok.Getter;
 @Builder
 public final class AutoShopReportDTO {
 
-    @NotNull
     String id;
     String name;
     String mark;
@@ -29,7 +27,6 @@ public final class AutoShopReportDTO {
     String year;
     String color;
     String oemNum;
-    @NotNull
     String priceNum;
 
 }

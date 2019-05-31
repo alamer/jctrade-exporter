@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -102,7 +103,7 @@ public class ExportXlsService {
     }
 
     private void writeStringToNextCell(Row rw, String s) {
-        Cell c = rw.createCell(rw.getLastCellNum() + 1);
+        Cell c = rw.createCell(rw.getLastCellNum() );
         c.setCellValue(s);
     }
 
@@ -111,6 +112,7 @@ public class ExportXlsService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String currentFolder = date.format(formatter);
         Path p = Paths.get(baseDir + "/" + currentFolder);
+        FileSystemUtils.deleteRecursively(p.toFile());
         p.toFile().mkdirs();
         return p;
     }
