@@ -15,4 +15,7 @@ public class ApplicationConfig {
     @Value("${autoshop.reportDir}")
     @Getter
     String outputReportDir;
+
+
+
 }
