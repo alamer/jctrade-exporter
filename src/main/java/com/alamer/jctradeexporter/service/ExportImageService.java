@@ -43,6 +43,7 @@ public class ExportImageService {
 
     public void exportImages() throws Exception {
         File dir=new File(config.getOutputImageDirectory());
+        dir.mkdirs();
         String sql = new String(Files.readAllBytes(resourceFile.getFile().toPath()));
         //List<AutoShopImageDTO> allNew = imageDAO.findAllNew();
         try (Connection con = dataSource.getConnection()) {
