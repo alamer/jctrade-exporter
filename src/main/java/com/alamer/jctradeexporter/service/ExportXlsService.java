@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,7 +38,8 @@ public class ExportXlsService {
         this.reportDAO = reportDAO;
     }
 
-    public void exportToXls() throws IOException {
+    public List<Path> exportToXls() throws IOException {
+        List<Path> generatedReposList=new ArrayList<>();
         List<AutoShopReportDTO> all = reportDAO.findAll();
         // Теперь сплитим по файлам
         Map<String, List<AutoShopReportDTO>> collect = splitDataByPriceNumColumn(all);
@@ -49,8 +51,10 @@ public class ExportXlsService {
             try (FileOutputStream fos = new FileOutputStream(reportFile)) {
                 workbook.write(fos);
             }
+            generatedReposList.add(reportFile.toPath());
 
         }
+        return generatedReposList;
     }
 
 
