@@ -73,7 +73,10 @@ public class JctradeExporterApplication implements CommandLineRunner {
             then = Instant.now();
             duration = Duration.between(now, then);
             logger.info("Done in "+duration.getSeconds()+" sec");
-            mailSenderService.sendFilesToDrom(reportList);
+
+            //mailSenderService.sendFilesToDrom(reportList);
+            Runtime.getRuntime().exec("explorer.exe /select, "
+                    +reportList.get(0).getParent().toString());
 
         } catch (Exception e) {
             e.printStackTrace();
