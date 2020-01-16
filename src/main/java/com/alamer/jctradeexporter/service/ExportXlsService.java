@@ -4,10 +4,7 @@ import com.alamer.jctradeexporter.configuration.ApplicationConfig;
 import com.alamer.jctradeexporter.dao.AutoshopReportDAO;
 import com.alamer.jctradeexporter.dto.AutoShopReportDTO;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileSystemUtils;
 
@@ -94,7 +91,8 @@ public class ExportXlsService {
         this.writeStringToNextCell(rw, nvl(dto.getPhoto2(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getPhoto3(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getPhoto4(), ""));
-        this.writeStringToNextCell(rw, nvl(dto.getPrice(), ""));
+        //this.writeStringToNextCell(rw, nvl(dto.getPrice(), ""));
+        this.writeIntToNextCell(rw,Integer.valueOf(nvl(dto.getPrice(), "0")));
         this.writeStringToNextCell(rw, nvl(dto.getNote(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getYear(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getColor(), ""));
@@ -107,6 +105,12 @@ public class ExportXlsService {
     }
 
     private void writeStringToNextCell(Row rw, String s) {
+        Cell c = rw.createCell(rw.getLastCellNum() );
+        c.setCellValue(s);
+    }
+
+
+    private void writeIntToNextCell(Row rw, Integer s) {
         Cell c = rw.createCell(rw.getLastCellNum() );
         c.setCellValue(s);
     }
