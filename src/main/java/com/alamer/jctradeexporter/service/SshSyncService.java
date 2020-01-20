@@ -31,17 +31,26 @@ public class SshSyncService {
         logger.info("Open sftp channel");
         Channel channel = session.openChannel("sftp");
         channel.connect();
-        ChannelSftp channelSftp= (ChannelSftp) channel;
-        logger.info("Navigate to "+remoteHostConfig.getPath());
+        ChannelSftp channelSftp = (ChannelSftp) channel;
+        logger.info("Navigate to " + remoteHostConfig.getPath());
         channelSftp.cd(remoteHostConfig.getPath());
         logger.info("Read local directory");
-        File dir=new File(config.getOutputImageDirectory());
-        File[] fileList=dir.listFiles();
+        File dir = new File(config.getOutputImageDirectory());
+        File[] fileList = dir.listFiles();
         logger.info(String.format("%d files to go", fileList.length));
-        int cnt=0;
-        for (File f:fileList) {
-            try(FileInputStream fos=new FileInputStream(f)) {
-                channelSftp.put(fos,f.getName(),ChannelSftp.OVERWRITE);
+        int cnt = 0;
+        for (File f : fileList) {
+            try (FileInputStream fos = new FileInputStream(f)) {
+                channelSftp.put(fos, f.getName(), ChannelSftp.OVERWRITE);
+                logger.info(String.format("%d of %d done", ++cnt, fileList.length));
+            }
+        }
+        logger.info("Sync  XLS files... ");
+        File outputReportDir = new File(config.getOutputReportDir());
+        cnt=0;
+        for (File f : outputReportDir.listFiles()) {
+            try (FileInputStream fos = new FileInputStream(f)) {
+                channelSftp.put(fos, f.getName(), ChannelSftp.OVERWRITE);
                 logger.info(String.format("%d of %d done", ++cnt, fileList.length));
             }
         }
@@ -52,13 +61,13 @@ public class SshSyncService {
 
 
     private Session startSession() throws JSchException {
-        JSch jSch=new JSch();
+        JSch jSch = new JSch();
         Session session = jSch.getSession(remoteHostConfig.getLogin(), remoteHostConfig.getHost(), remoteHostConfig.getPort());
-        String privateKey =remoteHostConfig.getKey();
+        String privateKey = remoteHostConfig.getKey();
         jSch.addIdentity(privateKey);
 
         Properties config = new Properties();
-        config.put("StrictHostKeyChecking","no");
+        config.put("StrictHostKeyChecking", "no");
         session.setConfig(config);
         session.connect();
         return session;

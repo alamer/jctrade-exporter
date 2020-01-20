@@ -93,7 +93,8 @@ public class ExportXlsService {
         this.writeStringToNextCell(rw, nvl(dto.getPhoto4(), ""));
         //this.writeStringToNextCell(rw, nvl(dto.getPrice(), ""));
         this.writeIntToNextCell(rw,Integer.valueOf(nvl(dto.getPrice(), "0")));
-        this.writeStringToNextCell(rw, nvl(dto.getNote(), ""));
+        this.writeStringToNextCell(rw, nvl(dto.getNote()+System.lineSeparator()+
+                "OEM: "+dto.getOemNum(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getYear(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getColor(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getOemNum(), ""));
