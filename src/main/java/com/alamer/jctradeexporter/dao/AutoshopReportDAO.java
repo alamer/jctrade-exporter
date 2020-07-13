@@ -32,7 +32,6 @@ public class AutoshopReportDAO {
 
     public List<AutoShopReportDTO> findAll() throws IOException {
         String sql= new String(Files.readAllBytes(resourceFile.getFile().toPath()));
-        Random rand = new Random();
         UUID uuid=UUID.randomUUID();
         sql=sql.replace("{rnd}",uuid.toString());
         return jdbcTemplate.query(sql, new AutoShopReportMapper());
