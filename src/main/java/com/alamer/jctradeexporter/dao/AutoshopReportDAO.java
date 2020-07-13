@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 @Component
 public class AutoshopReportDAO {
@@ -30,7 +32,9 @@ public class AutoshopReportDAO {
 
     public List<AutoShopReportDTO> findAll() throws IOException {
         String sql= new String(Files.readAllBytes(resourceFile.getFile().toPath()));
-
+        Random rand = new Random();
+        UUID uuid=UUID.randomUUID();
+        sql=sql.replace("{rnd}",uuid.toString());
         return jdbcTemplate.query(sql, new AutoShopReportMapper());
     }
 }
