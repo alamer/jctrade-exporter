@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.alamer</groupId>
     <artifactId>jctrade-exporter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
     <name>jctrade-exporter</name>
     <description>Export data from JCTrade export legacy</description>
 

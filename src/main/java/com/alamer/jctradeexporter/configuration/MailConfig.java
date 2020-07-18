@@ -18,4 +18,7 @@ public class MailConfig {
     @Getter
     private Map<String,String> toEmailMap;
 
+    @Value("${mail.send}")
+    boolean sendMail;
+
 }

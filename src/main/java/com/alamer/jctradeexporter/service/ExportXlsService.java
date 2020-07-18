@@ -4,21 +4,14 @@ import com.alamer.jctradeexporter.configuration.ApplicationConfig;
 import com.alamer.jctradeexporter.dao.AutoshopReportDAO;
 import com.alamer.jctradeexporter.dto.AutoShopReportDTO;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,21 +26,25 @@ public class ExportXlsService {
     final
     AutoshopReportDAO reportDAO;
 
-    public ExportXlsService(ApplicationConfig config, AutoshopReportDAO reportDAO) {
+    final XlsPathService xlsPathService;
+
+    public ExportXlsService(ApplicationConfig config, AutoshopReportDAO reportDAO, XlsPathService xlsPathService) {
         this.config = config;
         this.reportDAO = reportDAO;
+        this.xlsPathService = xlsPathService;
     }
 
     public List<Path> exportToXls() throws IOException {
-        List<Path> generatedReposList=new ArrayList<>();
+        List<Path> generatedReposList = new ArrayList<>();
         List<AutoShopReportDTO> all = reportDAO.findAll();
         // Теперь сплитим по файлам
         Map<String, List<AutoShopReportDTO>> collect = splitDataByPriceNumColumn(all);
-        Path savePath=getPath(config.getOutputReportDir());
+        xlsPathService.cleanPath(config.getOutputReportDir());
+        Path savePath = xlsPathService.getPath(config.getOutputReportDir());
         for (String key : collect.keySet()) {
             List<AutoShopReportDTO> reportDTOList = collect.get(key);
             Workbook workbook = generateWorkbookFromReport(reportDTOList);
-            File reportFile = new File(savePath.toString()+"/"+key);
+            File reportFile = new File(savePath.toString() + "/" + key);
             try (FileOutputStream fos = new FileOutputStream(reportFile)) {
                 workbook.write(fos);
             }
@@ -94,8 +91,10 @@ public class ExportXlsService {
         this.writeStringToNextCell(rw, nvl(dto.getPhoto2(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getPhoto3(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getPhoto4(), ""));
-        this.writeStringToNextCell(rw, nvl(dto.getPrice(), ""));
-        this.writeStringToNextCell(rw, nvl(dto.getNote(), ""));
+        //this.writeStringToNextCell(rw, nvl(dto.getPrice(), ""));
+        this.writeIntToNextCell(rw, Integer.valueOf(nvl(dto.getPrice(), "0")));
+        this.writeStringToNextCell(rw, nvl(dto.getNote() + System.lineSeparator() +
+                "OEM: " + dto.getOemNum(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getYear(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getColor(), ""));
         this.writeStringToNextCell(rw, nvl(dto.getOemNum(), ""));
@@ -107,19 +106,28 @@ public class ExportXlsService {
     }
 
     private void writeStringToNextCell(Row rw, String s) {
-        Cell c = rw.createCell(rw.getLastCellNum() );
+        Cell c = rw.createCell(rw.getLastCellNum());
+        c.setCellType(CellType.STRING);
         c.setCellValue(s);
     }
 
-    private Path getPath(String baseDir) {
-        LocalDate date = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        String currentFolder = date.format(formatter);
-        Path p = Paths.get(baseDir + "/" + currentFolder);
-        FileSystemUtils.deleteRecursively(p.toFile());
-        p.toFile().mkdirs();
-        return p;
+
+    private void writeIntToNextCell(Row rw, Integer s) {
+        Cell c = rw.createCell(rw.getLastCellNum());
+        c.setCellValue(s);
     }
+
+
+
+//    private Path getPath(String baseDir) {
+//        LocalDate date = LocalDate.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+//        String currentFolder = date.format(formatter);
+//        Path p = Paths.get(baseDir + "/" + currentFolder);
+//        FileSystemUtils.deleteRecursively(p.toFile());
+//        p.toFile().mkdirs();
+//        return p;
+//    }
 
 
 }

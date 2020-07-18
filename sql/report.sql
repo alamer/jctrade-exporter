@@ -9,10 +9,10 @@ SELECT a.BARCODE
      , FIELD6 /*Перед-зад*/
      , FIELD8 /*Верх-низ*/
      , FIELD13 /*Дата выпуска*/
-     , case when p1.photo_num is not null then concat("http://titancars38.ru/cat_sync/",p1.BARCODE , '_' , p1.PHOTO_NUM , '.jpg') else '' end photo_1
-     , case when p1.photo_num is not null then concat("http://titancars38.ru/cat_sync/",p2.BARCODE , '_' , p2.PHOTO_NUM , '.jpg') else '' end photo_2
-     , case when p1.photo_num is not null then concat("http://titancars38.ru/cat_sync/",p3.BARCODE , '_' , p3.PHOTO_NUM , '.jpg') else '' end photo_3
-     , case when p1.photo_num is not null then concat("http://titancars38.ru/cat_sync/",p4.BARCODE , '_' , p4.PHOTO_NUM , '.jpg') else '' end photo_4
+     , case when p1.photo_num is not null then concat("https://titancars38.ru/cat_sync/{rnd}/",p1.BARCODE , '_' , p1.PHOTO_NUM , '.jpg') else '' end photo_1
+     , case when p1.photo_num is not null then concat("https://titancars38.ru/cat_sync/{rnd}/",p2.BARCODE , '_' , p2.PHOTO_NUM , '.jpg') else '' end photo_2
+     , case when p1.photo_num is not null then concat("https://titancars38.ru/cat_sync/{rnd}/",p3.BARCODE , '_' , p3.PHOTO_NUM , '.jpg') else '' end photo_3
+     , case when p1.photo_num is not null then concat("https://titancars38.ru/cat_sync/{rnd}/",p4.BARCODE , '_' , p4.PHOTO_NUM , '.jpg') else '' end photo_4
      , FLOOR(PRICE_REC_RUB) as PRICE_REC_RUB
      , REMARK /*Примечание*/
      ,FIELD13 /*Год*/
